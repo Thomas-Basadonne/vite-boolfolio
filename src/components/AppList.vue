@@ -1,11 +1,17 @@
 <script>
 // import MyComponent from "./components/MyComponent.vue";
 import AppCard from "./AppCard.vue";
+import axios from "axios";
 
 export default {
   data() {
     return {
       title: "Hello world",
+
+      projects: {
+        list: [],
+        pages: [],
+      },
     };
   },
 
@@ -17,26 +23,40 @@ export default {
   components: {
     AppCard,
   },
+
+  methods: {
+    // fetchProjects(endPoint = null) {
+    //   if (!endPoint) endPoint = "http://127.0.0.1:8000/api/projects";
+    //   axios.get(endPoint).then((response) => {
+    //     this.projects.list = response.data.data;
+    //     this.projects.pages = response.data.links;
+    //   });
+    // },
+    fetchProjects() {
+      axios.get("http://127.0.0.1:8000/api/projects").then((response) => {
+        this.projects = response.data;
+      });
+    },
+  },
+
+  created() {
+    this.fetchProjects();
+  },
 };
 </script>
 
 <template>
   <div class="container">
     <h1 class="my-4">Lista Progetti</h1>
-    <!-- v-if controllo presenza progetti -->
-    <!-- <div v-if="projects.length" class="row justify-content-center g-4"> -->
-    <div class="d-flex flex-wrap">
+    <div class="row justify-content-center g-4">
       <AppCard
         v-for="project in projects"
         :key="project.id"
         :project="project"
-        class="col-3 m-1"
+        class="col-4"
       />
     </div>
 
-    <!-- </div> -->
-
-    <!-- v-else stampa il messaggio -->
     <!-- <div v-else>
       <h1>Non ci sono progetti da visualizzare</h1>
     </div> -->
